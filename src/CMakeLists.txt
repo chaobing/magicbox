@@ -1,0 +1,15 @@
+SET(POINT_LIB "point")
+
+#lib files directories
+INCLUDE_DIRECTORIES(.)
+
+#build target
+AUX_SOURCE_DIRECTORY(. SRC_LIST)
+
+#display messages
+MESSAGE(STATUS "SRC_LIST: ${SRC_LIST}")
+MESSAGE(STATUS "LIB_PATH: ${LIB_PATH}")
+
+#build library
+SET(LIBRARY_OUTPUT_PATH ${LIB_PATH})
+ADD_LIBRARY(${POINT_LIB} ${SRC_LIST})
