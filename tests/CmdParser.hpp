@@ -1,8 +1,7 @@
 #pragma once
 
-#include <iostream>
-#include <unistd.h>
-#include "LogMgr.hpp"
+#include "config.hpp"
+#include "logmgr.hpp"
 
 class CmdParser{
 	public:
@@ -24,28 +23,34 @@ class CmdParser{
 		LogMgr log_mgr_;
 };
 
-void CmdParser::parse_cmd(){
-	int opt = 0;
-	const char *optstring = "a:vh";
-	while((opt = getopt(argc_, argv_, optstring)) != -1){
-		switch(opt){
-			case 'a':
-				std::cout <<"not provided"<<std::endl;
-				break;
-			case 'v':
-				std::cout <<"cmake sample 0.0"<<std::endl;
-				exit(-1);
-			case 'h':
-			default:
-				cmd_helper();
-				exit(1);
-		}
-	}
+void CmdParser::parse_cmd() {
+  int opt = 0;
+  const char *optstring = "o:d:vh";
+  while ((opt = getopt(argc_, argv_, optstring)) != -1) {
+    switch (opt) {
+    case 'o':
+      MagicCfg::Instance()->set_output_dir(optarg);
+      break;
+    case 'd':
+      MagicCfg::Instance()->parse_dump_flag(optarg);
+      break;
+    case 'v':
+      cout << MagicCfg::Instance()->tag();
+      cout << MagicCfg::Instance()->magic_version_string();
+      exit(-1);
+    case 'h':
+    default:
+      cmd_helper();
+      exit(1);
+    }
+  }
 }
 
 void CmdParser::cmd_helper(){
-	std::cout<< argv_[0] << "usage: " <<std::endl
-		<<"\t-a not provided" <<std::endl
-		<<"\t-v version"<<std::endl
-		<<"\t-h help"<<std::endl;
+  std::cout << argv_[0] << " usage: " << std::endl
+            << "\t-o not provided" << std::endl
+            << "\t-d set dump_flag, use commas as delimiter, [A, B, C, all]"
+            << std::endl
+            << "\t-v version" << std::endl
+            << "\t-h help" << std::endl;
 }
